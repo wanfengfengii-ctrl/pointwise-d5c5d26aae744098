@@ -4,7 +4,7 @@ from decimal import Decimal, localcontext
 import json
 from .errors import ValidationError
 from .fitting import coverage
-from .numerics import PRECISION
+from .numerics import PRECISION, mass_vertices
 from .observations import encode, name, number
 
 
@@ -36,10 +36,11 @@ class Reporting:
         if not points or any(point not in cohort.support for point in points):
             raise ValidationError("cutoffs must be a nonempty list of support points")
         fitted = self.fitting.get(cohort_id)
-        extrema = (fitted.mass,)
+        matrix = coverage(cohort)
         bounds = []
         with localcontext() as context:
             context.prec = PRECISION
+            extrema = mass_vertices(matrix, fitted.pattern_probabilities)
             for point in points:
                 end = cohort.support.index(point) + 1
                 values = [sum(vertex[:end], Decimal(0)) for vertex in extrema]
