@@ -1,0 +1,23 @@
+[
+  {
+    "op": "import",
+    "observations": [
+      {"id": "exact-1", "rev": 1, "lower": 1, "upper": 1, "count": 1},
+      {"id": "exact-2", "rev": 1, "lower": 2, "upper": 2, "count": 3}
+    ]
+  },
+  {"op": "freeze", "cohort": "baseline", "support": [1, 2], "ids": ["exact-1", "exact-2"]},
+  {"op": "fit", "cohort": "baseline"},
+  {"op": "survival", "cohort": "baseline", "cutoffs": [1, 2], "report": "baseline-report"},
+  {
+    "op": "import",
+    "observations": [
+      {"id": "exact-1", "rev": 2, "lower": 1, "upper": 1, "count": 3},
+      {"id": "exact-2", "rev": 2, "lower": 2, "upper": 2, "count": 1}
+    ]
+  },
+  {"op": "freeze", "cohort": "corrected", "support": [1, 2], "ids": ["exact-1", "exact-2"]},
+  {"op": "fit", "cohort": "corrected"},
+  {"op": "survival", "cohort": "corrected", "cutoffs": [1, 2], "report": "corrected-report"},
+  {"op": "read_report", "report": "baseline-report"}
+]
